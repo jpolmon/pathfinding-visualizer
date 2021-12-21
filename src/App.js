@@ -1,14 +1,11 @@
-import './App.css';
-import Header from './components/Header';
-import Grid from './components/Grid';
+import "./App.css";
+import PathfindingVisualizer from "./PathfindingVisualizer/PathfindingVisualizer";
 
 function App() {
   return (
-    <div>
-      <Header />
-      <Grid />
+    <div className="App">
+      <PathfindingVisualizer />
     </div>
-
   );
 }
 
