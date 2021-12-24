@@ -23,18 +23,25 @@ export default class PathfindingVisualizer extends Component {
     this.setState({nodes})
   }
 
+  visualizeDijkstra() {
+    const {grid} = this.state;
+  }
+
   render() {
     const {nodes} = this.state;
     console.log(nodes);
 
     return (
-      <div className="grid">
-        {nodes.map((row, rowIdx) => {
-          return <div>
-            {row.map((node, nodeIdx) => <Node></Node>)}
-          </div>
-        })}
-      </div>
+      <>
+        <button onClick={() => this.visualizeDijkstra()}>Visualize Dijkstra's Algorithm</button>
+        <div className="grid">
+          {nodes.map((row, rowIdx) => {
+            return <div>
+              {row.map((node, nodeIdx) => <Node></Node>)}
+            </div>
+          })}
+        </div>
+      </>
     );
   }
 }
