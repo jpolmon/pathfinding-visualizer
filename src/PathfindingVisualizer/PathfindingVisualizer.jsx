@@ -3,24 +3,85 @@ import Node from './Node/Node';
 import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/dijkstra';
 
 import './PathfindingVisualizer.css';
+import getAllNodes from '../algorithms/utils/getAllNodes';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const END_NODE_ROW = 10;
 const END_NODE_COL = 35;
 
-export default class PathfindingVisualizer extends Component {
+const getStartingGrid = () => {
+  const grid = [];
+  for (let row = 0; row < 20; row++) {
+    const thisRow = [];
+    for (let col = 0; col < 50; col++) {
+      thisRow.push(createNode(row, col));
+    }
+    grid.push(thisRow);
+  }
+  return grid;
+};
+
+const createNode = (row, col) => {
+  return {
+    row,
+    col,
+    isStart: row === START_NODE_ROW && col === START_NODE_COL,
+    isEnd: row === END_NODE_ROW && col === END_NODE_COL,
+    distance: Infinity,
+    isVisited: false,
+    isWall: false, 
+    previousNode: null,
+  };
+};
+
+const renderWalls = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+}
+
+const initialState = {
+  grid: getStartingGrid(),
+  mouseIsPressed: false,
+}
+
+export default class PathfindingVisualizer extends Component {  
   constructor() {
     super();
-    this.state = {
-      grid: [],
-      mouseIsPressed: false,
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
-    const grid = getStartingGrid();
-    this.setState({ grid })
+    this.initialState = this.state
+  }
+
+  reset() {
+    const nodesObj = getAllNodes(this.initialState.grid);
+    for (const node of nodesObj) {
+      node.distance = Infinity;
+      (node.row === START_NODE_ROW && node.col === START_NODE_COL) ? node.isStart = true : node.isStart = false;
+      (node.row === END_NODE_ROW && node.col === END_NODE_COL) ? node.isEnd = true : node.isEnd = false;
+      node.isWall = false;
+    }
+    
+    const nodesHtml = document.querySelectorAll('.node');
+    for (const node of nodesHtml) {
+      node.classList.remove('node-visited', 'node-wall', 'node-shortest-path', 'node-start', 'node-end');
+      const row = parseInt(node.id.split('-')[1]);
+      const col = parseInt(node.id.split('-')[2]);
+      if (row === START_NODE_ROW && col === START_NODE_COL) {
+        node.classList.add('node-start');
+      } 
+      if (row === END_NODE_ROW && col === END_NODE_COL) {
+        node.classList.add('node-end');
+      }
+    }
   }
 
   handleMouseDown(row, col) {
@@ -81,6 +142,7 @@ export default class PathfindingVisualizer extends Component {
     return (
       <>
         <button onClick={() => this.visualizeDijkstra()}>Visualize Dijkstra's Algorithm</button>
+        <button onClick={() => this.reset()}>Reset Board</button>
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
@@ -112,38 +174,3 @@ export default class PathfindingVisualizer extends Component {
   }
 };
 
-const getStartingGrid = () => {
-  const grid = [];
-  for (let row = 0; row < 20; row++) {
-    const thisRow = [];
-    for (let col = 0; col < 50; col++) {
-      thisRow.push(createNode(row, col));
-    }
-    grid.push(thisRow);
-  }
-  return grid;
-};
-
-const createNode = (row, col) => {
-  return {
-    row,
-    col,
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isEnd: row === END_NODE_ROW && col === END_NODE_COL,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false, 
-    previousNode: null,
-  };
-};
-
-const renderWalls = (grid, row, col) => {
-  const newGrid = grid.slice();
-  const node = newGrid[row][col];
-  const newNode = {
-    ...node,
-    isWall: !node.isWall,
-  };
-  newGrid[row][col] = newNode;
-  return newGrid;
-}

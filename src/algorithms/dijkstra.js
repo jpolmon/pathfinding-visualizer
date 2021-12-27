@@ -46,6 +46,5 @@ export function getNodesInShortestPathOrder(endNode) {
     nodesInShortestPathOrder.unshift(currentNode);
     currentNode = currentNode.previousNode;
   }
-  console.log(nodesInShortestPathOrder);
   return nodesInShortestPathOrder;
 }

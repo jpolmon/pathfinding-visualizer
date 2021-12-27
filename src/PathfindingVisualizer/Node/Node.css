@@ -7,10 +7,12 @@
 
 .node-end {
   background-color: rgb(70, 29, 65);
+  /* background-color: red; */
 }
 
 .node-start {
   background-color: rgb(177, 15, 123);
+  /* background-color: green; */
 }
 
 .node-visited {
