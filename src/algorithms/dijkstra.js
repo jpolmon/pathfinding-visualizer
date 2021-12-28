@@ -1,4 +1,3 @@
-import FibHeap from "./utils/FibHeap";
 import getAllNodes from "./utils/getAllNodes";
 
 export function dijkstra(grid, startNode, endNode) {

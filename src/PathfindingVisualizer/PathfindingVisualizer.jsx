@@ -65,9 +65,11 @@ export default class PathfindingVisualizer extends Component {
     const nodesObj = getAllNodes(this.initialState.grid);
     for (const node of nodesObj) {
       node.distance = Infinity;
+      node.previousNode = null;
       (node.row === START_NODE_ROW && node.col === START_NODE_COL) ? node.isStart = true : node.isStart = false;
       (node.row === END_NODE_ROW && node.col === END_NODE_COL) ? node.isEnd = true : node.isEnd = false;
       node.isWall = false;
+      node.isVisited = false;
     }
     
     const nodesHtml = document.querySelectorAll('.node');
